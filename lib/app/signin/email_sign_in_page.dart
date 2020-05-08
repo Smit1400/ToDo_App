@@ -75,7 +75,7 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
         : 'Already have an account? Log in';
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.black87,
         title: Text('Welcome to ToDo App'),
         centerTitle: true,
       ),
@@ -124,11 +124,11 @@ class _EmailSignInPageState extends State<EmailSignInPage> {
                       primaryText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
-                    color: Colors.indigo,
-                    disabledColor: Colors.indigo,
+                    color: Colors.grey[200],
+                    disabledColor: Colors.grey[200],
                     onPressed: () {
                       print('Email: $_email and Password: $_password');
                       _submit();

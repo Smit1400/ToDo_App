@@ -17,9 +17,6 @@ class _MyAppState extends State<MyApp> {
       create: (context) => Auth(),
       child: MaterialApp(
         home: LandingPage(),
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-        ),
       ),
     );
   }

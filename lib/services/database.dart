@@ -41,6 +41,7 @@ class FirestoreDatabase implements Database {
             id: snapshot.documentID,
             name: snapshot.data['name'],
             content: snapshot.data['content'],
+            datetime: snapshot.data['datetime'],
           ),
         )
         .toList());

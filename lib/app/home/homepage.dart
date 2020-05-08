@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/app/home/empty_page.dart';
 import 'package:todo_app/app/home/register_todo_task.dart';
 import 'package:todo_app/app/home/task_list_tile.dart';
 import 'package:todo_app/models/task.dart';
@@ -28,8 +29,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
+      backgroundColor: Colors.grey[850],
       appBar: AppBar(
-        title: Text('Home'),
+        backgroundColor: Colors.black87,
+        title: Text(
+          'Home',
+          style: TextStyle(
+            color: Colors.grey[200],
+          ),
+        ),
         centerTitle: true,
         titleSpacing: 1.0,
         actions: <Widget>[
@@ -39,12 +47,12 @@ class _HomePageState extends State<HomePage> {
             },
             icon: Icon(
               Icons.person,
-              color: Colors.white,
+              color: Colors.grey[200],
             ),
             label: Text(
               'Logout',
               style: TextStyle(
-                color: Colors.white,
+                color: Colors.grey[200],
               ),
             ),
           ),
@@ -52,7 +60,11 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _buildContents(),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        backgroundColor: Colors.grey,
+        child: Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
         onPressed: () => _onButtonPressed(context),
       ),
     );
@@ -65,13 +77,38 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final tasks = snapshot.data;
-          final children = tasks
-              .map((task) => TaskListTile(task: task, database: database))
-              .toList();
-          return ListView(
-            children: children,
-          );
+          if (tasks.isNotEmpty) {
+            final children = tasks
+                .map((task) => TaskListTile(task: task, database: database))
+                .toList();
+            return ListView(
+              children: children,
+            );
+          } else {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Nothing Here',
+                    style: TextStyle(
+                      fontSize: 32,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Text(
+                    'Add a new item to get started',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
         } else if (snapshot.hasError) {
+          print("hello: ${snapshot.error}");
           return Center(
             child: Text('Some Error Occurred'),
           );

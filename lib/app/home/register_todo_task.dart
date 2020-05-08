@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:todo_app/models/task.dart';
 import 'package:todo_app/services/database.dart';
 
@@ -14,6 +16,7 @@ class RegisterTodoTask extends StatefulWidget {
 class _RegisterTodoTaskState extends State<RegisterTodoTask> {
   String _name;
   String _content;
+  DateTime _date;
   final _formKey = GlobalKey<FormState>();
 
   bool _onRegister() {
@@ -30,7 +33,12 @@ class _RegisterTodoTaskState extends State<RegisterTodoTask> {
       try {
         final id = documnetIdFromCurrentDate();
         print(id);
-        final Task task = Task(id: id, name: _name, content: _content);
+        Timestamp datetime_to_timestamp = Timestamp.fromDate(_date);
+        final Task task = Task(
+            id: id,
+            name: _name,
+            content: _content,
+            datetime: datetime_to_timestamp);
         await widget.database.createJob(task);
         Navigator.of(context).pop();
       } catch (e) {
@@ -43,6 +51,7 @@ class _RegisterTodoTaskState extends State<RegisterTodoTask> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black87,
         title: Text('New task'),
         centerTitle: true,
         titleSpacing: 1.0,
@@ -84,15 +93,38 @@ class _RegisterTodoTaskState extends State<RegisterTodoTask> {
                 SizedBox(height: 8.0),
                 SizedBox(
                   height: 50.0,
+                  child: FlatButton(
+                    color: Colors.grey[200],
+                    onPressed: () {
+                      DatePicker.showDateTimePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(2018, 3, 5),
+                          maxTime: DateTime(2100, 6, 7), onChanged: (date) {
+                        print('change $date');
+                      }, onConfirm: (date) {
+                        setState(() {
+                          _date = date;
+                        });
+                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: Text(
+                      _date == null ? 'Select date and time' : '$_date',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                SizedBox(
+                  height: 50.0,
                   child: RaisedButton(
                     child: Text(
                       'Register Task',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     onPressed: () => _createJob(context),
-                    color: Colors.indigo[400],
+                    color: Colors.grey[200],
                   ),
                 ),
               ],
